@@ -94,11 +94,28 @@ class LangawGame extends Game with TapDetector {
   }
 
   void onTapDown(TapDownDetails d) {
-    // handle taps here
-    flies.forEach((Fly fly) {
-      if (fly.flyRect.contains(d.globalPosition)) {
-        fly.onTapDown();
+    bool isHandled = false;
+
+    if (!isHandled && startButton.rect.contains(d.globalPosition)) {
+      if (activeView == View.home || activeView == View.lost) {
+        startButton.onTapDown();
+        isHandled = true;
       }
-    });
+    }
+
+    if (!isHandled) {
+      flies.forEach((Fly fly) {
+        if (fly.flyRect.contains(d.globalPosition)) {
+          fly.onTapDown();
+          isHandled = true;
+        }
+      });
+    }
+    // handle taps here
+    // flies.forEach((Fly fly) {
+    //   if (fly.flyRect.contains(d.globalPosition)) {
+    //     fly.onTapDown();
+    //   }
+    // });
   }
 }
