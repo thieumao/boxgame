@@ -1,8 +1,9 @@
 import 'dart:ui';
 import 'package:flame/game.dart';
+import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 
-class BoxGame extends Game {
+class BoxGame extends Game with TapDetector {
   Size screenSize;
   bool hasWon = false;
 

@@ -11,11 +11,11 @@ void main() async {
   await flameUtil.fullScreen();
   await flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
-  // BoxGame game = BoxGame();
-  // runApp(game.widget);
   BoxGame game = BoxGame();
-  TapGestureRecognizer tapper = TapGestureRecognizer();
-  tapper.onTapDown = game.onTapDown;
   runApp(game.widget);
-  flameUtil.addGestureRecognizer(tapper);
+  // BoxGame game = BoxGame();
+  // TapGestureRecognizer tapper = TapGestureRecognizer();
+  // tapper.onTapDown = game.onTapDown;
+  // runApp(game.widget);
+  // flameUtil.addGestureRecognizer(tapper);
 }
