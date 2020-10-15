@@ -4,6 +4,8 @@ import 'package:boxgame/components/fly.dart';
 import 'package:boxgame/langaw-game.dart';
 
 class DroolerFly extends Fly {
+  double get speed => game.tileSize * 1.5;
+
   DroolerFly(LangawGame game, double x, double y) : super(game) {
     flyingSprite = List();
     flyingSprite.add(Sprite('flies/drooler-fly-1.png'));

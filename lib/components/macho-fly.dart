@@ -4,6 +4,8 @@ import 'package:boxgame/components/fly.dart';
 import 'package:boxgame/langaw-game.dart';
 
 class MachoFly extends Fly {
+  double get speed => game.tileSize * 2.5;
+
   MachoFly(LangawGame game, double x, double y) : super(game) {
     flyingSprite = List();
     flyingSprite.add(Sprite('flies/macho-fly-1.png'));
