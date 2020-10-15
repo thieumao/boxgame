@@ -12,11 +12,12 @@ class Fly {
   bool isDead = false;
   bool isOffScreen = false;
 
-  Fly(this.game, double x, double y) {
-    flyRect = Rect.fromLTWH(x, y, game.tileSize, game.tileSize);
-    // flyPaint = Paint();
-    // flyPaint.color = Color(0xff6ab04c);
-  }
+  // Fly(this.game, double x, double y) {
+  //   flyRect = Rect.fromLTWH(x, y, game.tileSize, game.tileSize);
+  //   // flyPaint = Paint();
+  //   // flyPaint.color = Color(0xff6ab04c);
+  // }
+  Fly(this.game);
 
   // void render(Canvas c) {
   //   c.drawRect(flyRect, flyPaint);
@@ -42,6 +43,8 @@ class Fly {
       }
     } else {
       flyingSpriteIndex += 30 * t;
+      print('flyingSpriteIndex = ');
+      print(flyingSpriteIndex);
       if (flyingSpriteIndex >= 2) {
         flyingSpriteIndex -= 2;
       }
