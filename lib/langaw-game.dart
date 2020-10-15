@@ -13,6 +13,7 @@ import 'package:boxgame/components/hungry-fly.dart';
 import 'package:boxgame/components/macho-fly.dart';
 import 'package:boxgame/view.dart';
 import 'package:boxgame/views/home-view.dart';
+import 'package:boxgame/views/lost-view.dart';
 import 'package:boxgame/components/start-button.dart';
 
 class LangawGame extends Game with TapDetector {
@@ -24,6 +25,7 @@ class LangawGame extends Game with TapDetector {
   View activeView = View.home;
   HomeView homeView;
   StartButton startButton;
+  LostView lostView;
 
   LangawGame() {
     initialize();
@@ -37,6 +39,7 @@ class LangawGame extends Game with TapDetector {
     background = Backyard(this);
     homeView = HomeView(this);
     startButton = StartButton(this);
+    lostView = LostView(this);
     spawnFly();
   }
 
@@ -77,6 +80,7 @@ class LangawGame extends Game with TapDetector {
     flies.forEach((Fly fly) => fly.render(canvas));
 
     if (activeView == View.home) homeView.render(canvas);
+    if (activeView == View.lost) lostView.render(canvas);
     if (activeView == View.home || activeView == View.lost) {
       startButton.render(canvas);
     }
@@ -103,13 +107,19 @@ class LangawGame extends Game with TapDetector {
       }
     }
 
+    // flies
     if (!isHandled) {
+      bool didHitAFly = false;
       flies.forEach((Fly fly) {
         if (fly.flyRect.contains(d.globalPosition)) {
           fly.onTapDown();
           isHandled = true;
+          didHitAFly = true;
         }
       });
+      if (activeView == View.playing && !didHitAFly) {
+        activeView = View.lost;
+      }
     }
     // handle taps here
     // flies.forEach((Fly fly) {
