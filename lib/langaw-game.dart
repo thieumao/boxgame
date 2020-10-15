@@ -11,6 +11,9 @@ import 'package:boxgame/components/agile-fly.dart';
 import 'package:boxgame/components/drooler-fly.dart';
 import 'package:boxgame/components/hungry-fly.dart';
 import 'package:boxgame/components/macho-fly.dart';
+import 'package:boxgame/view.dart';
+import 'package:boxgame/views/home-view.dart';
+import 'package:boxgame/components/start-button.dart';
 
 class LangawGame extends Game with TapDetector {
   Size screenSize;
@@ -18,6 +21,9 @@ class LangawGame extends Game with TapDetector {
   Backyard background;
   List<Fly> flies;
   Random rnd;
+  View activeView = View.home;
+  HomeView homeView;
+  StartButton startButton;
 
   LangawGame() {
     initialize();
@@ -29,6 +35,8 @@ class LangawGame extends Game with TapDetector {
     resize(await Flame.util.initialDimensions());
 
     background = Backyard(this);
+    homeView = HomeView(this);
+    startButton = StartButton(this);
     spawnFly();
   }
 
@@ -67,6 +75,11 @@ class LangawGame extends Game with TapDetector {
     background.render(canvas);
 
     flies.forEach((Fly fly) => fly.render(canvas));
+
+    if (activeView == View.home) homeView.render(canvas);
+    if (activeView == View.home || activeView == View.lost) {
+      startButton.render(canvas);
+    }
   }
 
   void update(double t) {
