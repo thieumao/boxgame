@@ -37,6 +37,7 @@ void main() async {
     'ui/icon-credits.png',
     'ui/icon-help.png',
     'ui/start-button.png',
+    'ui/callout.png',
   ]);
 
   LangawGame game = LangawGame();

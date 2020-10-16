@@ -20,6 +20,7 @@ import 'package:boxgame/components/credits-button.dart';
 import 'package:boxgame/components/help-button.dart';
 import 'package:boxgame/views/help-view.dart';
 import 'package:boxgame/views/credits-view.dart';
+import 'package:boxgame/components/score-display.dart';
 
 class LangawGame extends Game with TapDetector {
   Size screenSize;
@@ -40,6 +41,10 @@ class LangawGame extends Game with TapDetector {
   HelpView helpView;
   CreditsView creditsView;
 
+  int score;
+  ScoreDisplay scoreDisplay;
+
+
   LangawGame() {
     initialize();
   }
@@ -59,6 +64,9 @@ class LangawGame extends Game with TapDetector {
     lostView = LostView(this);
     helpView = HelpView(this);
     creditsView = CreditsView(this);
+
+    score = 0;
+    scoreDisplay = ScoreDisplay(this);
   }
 
   void spawnFly() {
@@ -87,6 +95,8 @@ class LangawGame extends Game with TapDetector {
   void render(Canvas canvas) {
     background.render(canvas);
 
+    if (activeView == View.playing) scoreDisplay.render(canvas);
+
     flies.forEach((Fly fly) => fly.render(canvas));
 
     if (activeView == View.home) homeView.render(canvas);
@@ -104,6 +114,8 @@ class LangawGame extends Game with TapDetector {
     spawner.update(t);
     flies.forEach((Fly fly) => fly.update(t));
     flies.removeWhere((Fly fly) => fly.isOffScreen);
+
+    if (activeView == View.playing) scoreDisplay.update(t);
   }
 
   void resize(Size size) {

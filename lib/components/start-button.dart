@@ -25,6 +25,8 @@ class StartButton {
   void update(double t) {}
 
   void onTapDown() {
+    game.score = 0;
+    
     game.activeView = View.playing;
     game.spawner.start();
   }
