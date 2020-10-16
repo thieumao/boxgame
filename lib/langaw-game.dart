@@ -15,6 +15,7 @@ import 'package:boxgame/view.dart';
 import 'package:boxgame/views/home-view.dart';
 import 'package:boxgame/views/lost-view.dart';
 import 'package:boxgame/components/start-button.dart';
+import 'package:boxgame/controllers/spawner.dart';
 
 class LangawGame extends Game with TapDetector {
   Size screenSize;
@@ -24,8 +25,9 @@ class LangawGame extends Game with TapDetector {
   Random rnd;
   View activeView = View.home;
   HomeView homeView;
-  StartButton startButton;
   LostView lostView;
+  StartButton startButton;
+  FlySpawner spawner;
 
   LangawGame() {
     initialize();
@@ -38,9 +40,10 @@ class LangawGame extends Game with TapDetector {
 
     background = Backyard(this);
     homeView = HomeView(this);
-    startButton = StartButton(this);
     lostView = LostView(this);
-    spawnFly();
+    startButton = StartButton(this);
+    // spawnFly();
+    spawner = FlySpawner(this);
   }
 
   void spawnFly() {
@@ -87,6 +90,7 @@ class LangawGame extends Game with TapDetector {
   }
 
   void update(double t) {
+    spawner.update(t);
     flies.forEach((Fly fly) => fly.update(t));
     flies.removeWhere((Fly fly) => fly.isOffScreen);
   }
