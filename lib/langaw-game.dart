@@ -16,39 +16,55 @@ import 'package:boxgame/views/home-view.dart';
 import 'package:boxgame/views/lost-view.dart';
 import 'package:boxgame/components/start-button.dart';
 import 'package:boxgame/controllers/spawner.dart';
+import 'package:boxgame/components/credits-button.dart';
+import 'package:boxgame/components/help-button.dart';
+import 'package:boxgame/views/help-view.dart';
+import 'package:boxgame/views/credits-view.dart';
 
 class LangawGame extends Game with TapDetector {
   Size screenSize;
   double tileSize;
+  Random rnd;
+
   Backyard background;
   List<Fly> flies;
-  Random rnd;
+  StartButton startButton;
+  HelpButton helpButton;
+  CreditsButton creditsButton;
+
+  FlySpawner spawner;
+
   View activeView = View.home;
   HomeView homeView;
   LostView lostView;
-  StartButton startButton;
-  FlySpawner spawner;
+  HelpView helpView;
+  CreditsView creditsView;
 
   LangawGame() {
     initialize();
   }
 
   void initialize() async {
-    flies = List<Fly>();
     rnd = Random();
+    flies = List<Fly>();
     resize(await Flame.util.initialDimensions());
 
     background = Backyard(this);
+    startButton = StartButton(this);
+    helpButton = HelpButton(this);
+    creditsButton = CreditsButton(this);
+
+    spawner = FlySpawner(this);
     homeView = HomeView(this);
     lostView = LostView(this);
-    startButton = StartButton(this);
-    // spawnFly();
-    spawner = FlySpawner(this);
+    helpView = HelpView(this);
+    creditsView = CreditsView(this);
   }
 
   void spawnFly() {
     double x = rnd.nextDouble() * (screenSize.width - tileSize * 2.025);
     double y = rnd.nextDouble() * (screenSize.height - tileSize * 2.025);
+
     switch (rnd.nextInt(5)) {
       case 0:
         flies.add(HouseFly(this, x, y));
@@ -66,18 +82,9 @@ class LangawGame extends Game with TapDetector {
         flies.add(HungryFly(this, x, y));
         break;
     }
-    // flies.add(HouseFly(this, x, y));
-    // flies.add(Fly(this, x, y));
-    // flies.add(Fly(this, 50, 50));
   }
 
   void render(Canvas canvas) {
-    // draw background
-    // Rect bgRect = Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
-    // Paint bgPaint = Paint();
-    // bgPaint.color = Color(0xff576574);
-    // canvas.drawRect(bgRect, bgPaint);
-
     background.render(canvas);
 
     flies.forEach((Fly fly) => fly.render(canvas));
@@ -86,7 +93,11 @@ class LangawGame extends Game with TapDetector {
     if (activeView == View.lost) lostView.render(canvas);
     if (activeView == View.home || activeView == View.lost) {
       startButton.render(canvas);
+      helpButton.render(canvas);
+      creditsButton.render(canvas);
     }
+    if (activeView == View.help) helpView.render(canvas);
+    if (activeView == View.credits) creditsView.render(canvas);
   }
 
   void update(double t) {
@@ -98,12 +109,36 @@ class LangawGame extends Game with TapDetector {
   void resize(Size size) {
     screenSize = size;
     tileSize = screenSize.width / 9;
-    super.resize(size);
   }
 
   void onTapDown(TapDownDetails d) {
     bool isHandled = false;
 
+    // dialog boxes
+    if (!isHandled) {
+      if (activeView == View.help || activeView == View.credits) {
+        activeView = View.home;
+        isHandled = true;
+      }
+    }
+
+    // help button
+    if (!isHandled && helpButton.rect.contains(d.globalPosition)) {
+      if (activeView == View.home || activeView == View.lost) {
+        helpButton.onTapDown();
+        isHandled = true;
+      }
+    }
+
+    // credits button
+    if (!isHandled && creditsButton.rect.contains(d.globalPosition)) {
+      if (activeView == View.home || activeView == View.lost) {
+        creditsButton.onTapDown();
+        isHandled = true;
+      }
+    }
+
+    // start button
     if (!isHandled && startButton.rect.contains(d.globalPosition)) {
       if (activeView == View.home || activeView == View.lost) {
         startButton.onTapDown();
@@ -125,11 +160,5 @@ class LangawGame extends Game with TapDetector {
         activeView = View.lost;
       }
     }
-    // handle taps here
-    // flies.forEach((Fly fly) {
-    //   if (fly.flyRect.contains(d.globalPosition)) {
-    //     fly.onTapDown();
-    //   }
-    // });
   }
 }
