@@ -4,6 +4,7 @@ import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:flutter/gestures.dart';
 
 void main() async {
@@ -40,7 +41,8 @@ void main() async {
     'ui/callout.png',
   ]);
 
-  LangawGame game = LangawGame();
+  SharedPreferences storage = await SharedPreferences.getInstance();
+  LangawGame game = LangawGame(storage);
   runApp(game.widget);
   // BoxGame game = BoxGame();
   // runApp(game.widget);

@@ -21,6 +21,8 @@ import 'package:boxgame/components/help-button.dart';
 import 'package:boxgame/views/help-view.dart';
 import 'package:boxgame/views/credits-view.dart';
 import 'package:boxgame/components/score-display.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:boxgame/components/highscore-display.dart';
 
 class LangawGame extends Game with TapDetector {
   Size screenSize;
@@ -44,8 +46,11 @@ class LangawGame extends Game with TapDetector {
   int score;
   ScoreDisplay scoreDisplay;
 
+  final SharedPreferences storage;
 
-  LangawGame() {
+  HighscoreDisplay highscoreDisplay;
+
+  LangawGame(this.storage) {
     initialize();
   }
 
@@ -67,6 +72,8 @@ class LangawGame extends Game with TapDetector {
 
     score = 0;
     scoreDisplay = ScoreDisplay(this);
+
+    highscoreDisplay = HighscoreDisplay(this);
   }
 
   void spawnFly() {
@@ -94,6 +101,7 @@ class LangawGame extends Game with TapDetector {
 
   void render(Canvas canvas) {
     background.render(canvas);
+    highscoreDisplay.render(canvas);
 
     if (activeView == View.playing) scoreDisplay.render(canvas);
 
