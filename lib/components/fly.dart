@@ -3,6 +3,7 @@ import 'package:flame/sprite.dart';
 import 'package:boxgame/langaw-game.dart';
 import 'package:boxgame/view.dart';
 import 'package:boxgame/components/callout.dart';
+import 'package:flame/flame.dart';
 
 class Fly {
   final LangawGame game;
@@ -77,6 +78,7 @@ class Fly {
     isDead = true;
 
     if (game.activeView == View.playing) {
+      Flame.audio.play('sfx/ouch' + (game.rnd.nextInt(11) + 1).toString() + '.ogg');
       game.score += 1;
       if (game.score > (game.storage.getInt('highscore') ?? 0)) {
         game.storage.setInt('highscore', game.score);

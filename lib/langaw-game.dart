@@ -23,6 +23,7 @@ import 'package:boxgame/views/credits-view.dart';
 import 'package:boxgame/components/score-display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boxgame/components/highscore-display.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class LangawGame extends Game with TapDetector {
   Size screenSize;
@@ -50,6 +51,9 @@ class LangawGame extends Game with TapDetector {
 
   HighscoreDisplay highscoreDisplay;
 
+  AudioPlayer homeBGM;
+  AudioPlayer playingBGM;
+
   LangawGame(this.storage) {
     initialize();
   }
@@ -74,6 +78,25 @@ class LangawGame extends Game with TapDetector {
     scoreDisplay = ScoreDisplay(this);
 
     highscoreDisplay = HighscoreDisplay(this);
+
+    homeBGM = await Flame.audio.loop('bgm/home.mp3', volume: .25);
+    homeBGM.pause();
+    playingBGM = await Flame.audio.loop('bgm/playing.mp3', volume: .25);
+    playingBGM.pause();
+
+    playHomeBGM();
+  }
+
+  void playHomeBGM() {
+    playingBGM.pause();
+    playingBGM.seek(Duration.zero);
+    homeBGM.resume();
+  }
+
+  void playPlayingBGM() {
+    homeBGM.pause();
+    homeBGM.seek(Duration.zero);
+    playingBGM.resume();
   }
 
   void spawnFly() {
@@ -177,6 +200,7 @@ class LangawGame extends Game with TapDetector {
         }
       });
       if (activeView == View.playing && !didHitAFly) {
+        Flame.audio.play('sfx/haha' + (rnd.nextInt(5) + 1).toString() + '.ogg');
         activeView = View.lost;
       }
     }
