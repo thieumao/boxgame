@@ -75,14 +75,20 @@ class Fly {
   }
 
   void onTapDown() {
-    isDead = true;
+    if (!isDead) {
+      if (game.soundButton.isEnabled) {
+        Flame.audio.play('sfx/ouch' + (game.rnd.nextInt(11) + 1).toString() + '.ogg');
+      }
 
-    if (game.activeView == View.playing) {
-      Flame.audio.play('sfx/ouch' + (game.rnd.nextInt(11) + 1).toString() + '.ogg');
-      game.score += 1;
-      if (game.score > (game.storage.getInt('highscore') ?? 0)) {
-        game.storage.setInt('highscore', game.score);
-        game.highscoreDisplay.updateHighscore();
+      isDead = true;
+
+      if (game.activeView == View.playing) {
+        Flame.audio.play('sfx/ouch' + (game.rnd.nextInt(11) + 1).toString() + '.ogg');
+        game.score += 1;
+        if (game.score > (game.storage.getInt('highscore') ?? 0)) {
+          game.storage.setInt('highscore', game.score);
+          game.highscoreDisplay.updateHighscore();
+        }
       }
     }
   }

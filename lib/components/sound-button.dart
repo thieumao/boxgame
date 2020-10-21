@@ -2,22 +2,22 @@ import 'dart:ui';
 import 'package:flame/sprite.dart';
 import 'package:boxgame/langaw-game.dart';
 
-class MusicButton {
+class SoundButton {
   final LangawGame game;
   Rect rect;
   Sprite enabledSprite;
   Sprite disabledSprite;
   bool isEnabled = true;
 
-  MusicButton(this.game) {
+  SoundButton(this.game) {
     rect = Rect.fromLTWH(
-      game.tileSize * .25,
+      game.tileSize * 1.5,
       game.tileSize * .25,
       game.tileSize,
       game.tileSize,
     );
-    enabledSprite = Sprite('ui/icon-music-enabled.png');
-    disabledSprite = Sprite('ui/icon-music-disabled.png');
+    enabledSprite = Sprite('ui/icon-sound-enabled.png');
+    disabledSprite = Sprite('ui/icon-sound-disabled.png');
   }
 
   void render(Canvas c) {
@@ -29,14 +29,6 @@ class MusicButton {
   }
 
   void onTapDown() {
-    if (isEnabled) {
-      isEnabled = false;
-      game.homeBGM.setVolume(0);
-      game.playingBGM.setVolume(0);
-    } else {
-      isEnabled = true;
-      game.homeBGM.setVolume(.25);
-      game.playingBGM.setVolume(.25);
-    }
+    isEnabled = !isEnabled;
   }
 }

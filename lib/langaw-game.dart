@@ -24,6 +24,8 @@ import 'package:boxgame/components/score-display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boxgame/components/highscore-display.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:boxgame/components/music-button.dart';
+import 'package:boxgame/components/sound-button.dart';
 
 class LangawGame extends Game with TapDetector {
   Size screenSize;
@@ -53,6 +55,9 @@ class LangawGame extends Game with TapDetector {
 
   AudioPlayer homeBGM;
   AudioPlayer playingBGM;
+
+  MusicButton musicButton;
+  SoundButton soundButton;
 
   LangawGame(this.storage) {
     initialize();
@@ -85,6 +90,9 @@ class LangawGame extends Game with TapDetector {
     playingBGM.pause();
 
     playHomeBGM();
+
+    musicButton = MusicButton(this);
+    soundButton = SoundButton(this);
   }
 
   void playHomeBGM() {
@@ -137,6 +145,10 @@ class LangawGame extends Game with TapDetector {
       helpButton.render(canvas);
       creditsButton.render(canvas);
     }
+
+    musicButton.render(canvas);
+    soundButton.render(canvas);
+
     if (activeView == View.help) helpView.render(canvas);
     if (activeView == View.credits) creditsView.render(canvas);
   }
@@ -181,6 +193,18 @@ class LangawGame extends Game with TapDetector {
       }
     }
 
+    // music button
+    if (!isHandled && musicButton.rect.contains(d.globalPosition)) {
+      musicButton.onTapDown();
+      isHandled = true;
+    }
+
+    // sound button
+    if (!isHandled && soundButton.rect.contains(d.globalPosition)) {
+      soundButton.onTapDown();
+      isHandled = true;
+    }
+
     // start button
     if (!isHandled && startButton.rect.contains(d.globalPosition)) {
       if (activeView == View.home || activeView == View.lost) {
@@ -200,7 +224,10 @@ class LangawGame extends Game with TapDetector {
         }
       });
       if (activeView == View.playing && !didHitAFly) {
-        Flame.audio.play('sfx/haha' + (rnd.nextInt(5) + 1).toString() + '.ogg');
+        if (soundButton.isEnabled) {
+          Flame.audio.play('sfx/haha' + (rnd.nextInt(5) + 1).toString() + '.ogg');
+        }
+        playHomeBGM();
         activeView = View.lost;
       }
     }
